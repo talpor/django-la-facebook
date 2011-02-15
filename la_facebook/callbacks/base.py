@@ -61,20 +61,10 @@ class BaseFacebookCallback(object):
             user = request.user
         redirect_to = self.redirect_url(request)
 
-        if user:
-            kwargs = {}
-            if not self.authenticated:
-                kwargs["identifier"] = self.identifier_from_data(user_data)
-            logger.debug("BaseFacebookCallback.__call__: Persisting user token")
-            self.persist(user, token, **kwargs)
-
         return redirect(redirect_to)
     
     def fetch_user_data(self, request, access, token):
         raise NotImplementedError("Callbacks must have a fetch_user_data method")
-    
-    def persist(self,user, token, identifier=None):
-        raise NotImplementedError("Callbacks should have a method to persist user token")
 
     def lookup_user(self, request, access, user_data):
         raise NotImplementedError("Callbacks must have a lookup_user method")

@@ -64,7 +64,9 @@ class DefaultFacebookCallback(BaseFacebookCallback):
 
     def handle_unauthenticated_user(self, request, user, access, token, user_data):
         self.login_user(request, user)
-        
+        identifier = self.identifier_from_data(user_data)
+        self.persist(user, token, identifier)
+
     def update_profile_from_graph(self, request, access, token, profile):
         user_data = self.fetch_user_data(request, access, token)
         for k, v in user_data.items():
@@ -109,7 +111,7 @@ class DefaultFacebookCallback(BaseFacebookCallback):
                     "user created for %s" % username)
 
         self.create_profile(request, access, token, user)
-
+        self.persist(user, token, identifier)
         self.login_user(request, user)
         return user
 
