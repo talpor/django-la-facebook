@@ -3,7 +3,6 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.db.models import get_model
 
-from django.contrib.auth import login
 from django.contrib.auth.models import User
 
 from django.conf import settings
@@ -78,22 +77,8 @@ class BaseFacebookCallback(object):
     def handle_unauthenticated_user(self, request, user, access, token, user_data):
         raise NotImplementedError("Callbacks must have a handle_unauthenticated_user method")
         
-    def update_profile_from_graph(self, request, access, token, profile):
-        raise NotImplementedError("Callbacks must have a update_profile_from_graph method")
-        
-    def create_profile(self, request, access, token, user):
-        raise NotImplementedError("Callbacks must have a create_profile method")               
-           
-    def create_user(self, request, access, token, user_data):
-        raise NotImplementedError("Callbacks must have a create_user method")       
-      
     def identifier_from_data(self, data):
         # @@@ currently this is being used to make/lookup users and we don't
         # want a clash between services. need to look into the more.
         return LA_FACEBOOK_PROFILE_PREFIX + data["id"]
 
-    def login_user(self, request, user):
-        user.backend = "django.contrib.auth.backends.ModelBackend"
-        logger.debug("BaseFacebookCallback.login_user: logging in user %s" \
-                "with ModelBackend" % str(user).strip())
-        login(request, user)               

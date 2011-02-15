@@ -1,8 +1,7 @@
 from django.db.models import get_model
-
-from django.contrib.auth.models import User
-
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.auth import login
 
 from la_facebook.la_fb_logging import logger
 from la_facebook.models import UserAssociation
@@ -61,6 +60,12 @@ class DefaultFacebookCallback(BaseFacebookCallback):
 
     def handle_no_user(self, request, access, token, user_data):
         return self.create_user(request, access, token, user_data)
+
+    def login_user(self, request, user):
+        user.backend = "django.contrib.auth.backends.ModelBackend"
+        logger.debug("BaseFacebookCallback.login_user: logging in user %s" \
+                "with ModelBackend" % str(user).strip())
+        login(request, user)               
 
     def handle_unauthenticated_user(self, request, user, access, token, user_data):
         self.login_user(request, user)
