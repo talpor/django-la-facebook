@@ -19,7 +19,6 @@ from la_facebook.exceptions import (
                     NotAuthorized, MissingToken, UnknownResponse, 
                     ServiceFail, FacebookSettingsKeyError
                     )
-from la_facebook.models import UserAssociation
 from la_facebook.utils.anyetree import etree
 from la_facebook.utils.loader import load_path_attr
 
@@ -228,46 +227,6 @@ class OAuthAccess(object):
             )
             request.sign_request(self.signature_method, self.consumer, token)
             return request.to_url()
-    
-    def persist(self, user, token, identifier=None):
-        """
-            set expiration
-            set defaults
-            set identifier if not none
-            if nothing was created save current associated defaults
-        """
-        expires = hasattr(token, "expires") and token.expires or None
-        defaults = {
-            "token": str(token),
-            "expires": expires,
-        }
-        if identifier is not None:
-            defaults["identifier"] = identifier
-        assoc, created = UserAssociation.objects.get_or_create(
-            user = user,
-            defaults = defaults,
-        )
-        if not created:
-            assoc.token = str(token)
-            assoc.expires = expires
-            assoc.save()
-    
-    def lookup_user(self, identifier):
-        """
-            query all users
-            query select user
-            try identify user
-            if user does not exist return none
-            else return user
-        """
-        queryset = UserAssociation.objects.all()
-        queryset = queryset.select_related("user")
-        try:
-            assoc = queryset.get(identifier=identifier)
-        except UserAssociation.DoesNotExist:
-            return None
-        else:
-            return assoc.user
     
     def make_api_call(self, kind, url, token, method="GET", **kwargs):
         if isinstance(token, OAuth20Token):

@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.conf import settings
 
 from la_facebook.la_fb_logging import logger
+from la_facebook.models import UserAssociation
 from la_facebook.callbacks.base import (BaseFacebookCallback, 
         get_default_redirect, FACEBOOK_GRAPH_TARGET)
 
@@ -15,8 +16,46 @@ class DefaultFacebookCallback(BaseFacebookCallback):
         return access.make_api_call("json", url, token)
     
     def lookup_user(self, request, access, user_data):
-        return access.lookup_user(identifier=self.identifier_from_data(user_data))
-    
+        """
+            query all users
+            query select user
+            try identify user
+            if user does not exist return none
+            else return user
+        """
+        identifier=self.identifier_from_data(user_data)
+        queryset = UserAssociation.objects.all()
+        queryset = queryset.select_related("user")
+        try:
+            assoc = queryset.get(identifier=identifier)
+        except UserAssociation.DoesNotExist:
+            return None
+        else:
+            return assoc.user
+
+    def persist(self, user, token, identifier=None):
+        """
+            set expiration
+            set defaults
+            set identifier if not none
+            if nothing was created save current associated defaults
+        """
+        expires = hasattr(token, "expires") and token.expires or None
+        defaults = {
+            "token": str(token),
+            "expires": expires,
+        }
+        if identifier is not None:
+            defaults["identifier"] = identifier
+        assoc, created = UserAssociation.objects.get_or_create(
+            user = user,
+            defaults = defaults,
+        )
+        if not created:
+            assoc.token = str(token)
+            assoc.expires = expires
+            assoc.save()
+
     def redirect_url(self, request):
         return get_default_redirect(request)
 

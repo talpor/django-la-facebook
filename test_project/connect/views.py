@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render_to_response
 from test_project.connect.models import Profile
+from django.contrib.auth.decorators import login_required
 
 def test_index(request):
     context_dict = {
@@ -8,7 +9,8 @@ def test_index(request):
     }
     
     return render_to_response('index.html', context_dict)
-    
+
+@login_required
 def after(request):
     # Let's prove facebook's creepy stalker-ware is working
     # TODO: Needs a lot of validation
