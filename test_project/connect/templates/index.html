@@ -1,9 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>This is a test</title>
+    <title>This is a test</title>
 </head>
 <body>
-	<a href="http://localhost:8000/la_facebook/login?next=/after">Connect to Facebook!</a>
+    <h2>django-la-facebook test project page</h2>
+    <p>Current User: {{ request.user }}</p>
+    {% for k,v in info.items %}
+    <p>{{ k }}: {{ v }}</p>
+    {% endfor %}
+        <a href="http://localhost:8000/la_facebook/login?next=/after">Connect to Facebook!</a>
+
 </body>
 </html>

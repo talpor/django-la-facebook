@@ -4,8 +4,15 @@ from test_project.connect.models import Profile
 from django.contrib.auth.decorators import login_required
 
 def test_index(request):
+    info = {}
+    if request.user.is_authenticated():
+        info['User Authenticated'] = 'Yes'
+        info['Django username'] = str(request.user)
+
     context_dict = {
         'app_id': settings.FACEBOOK_APP_ID,
+        'request': request,
+        'info': info,
     }
     
     return render_to_response('index.html', context_dict)
