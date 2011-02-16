@@ -63,7 +63,7 @@ class DefaultFacebookCallback(BaseFacebookCallback):
 
     def login_user(self, request, user):
         user.backend = "django.contrib.auth.backends.ModelBackend"
-        logger.debug("BaseFacebookCallback.login_user: logging in user %s" \
+        logger.debug("DefaultFacebookCallback.login_user: logging in user %s" \
                 "with ModelBackend" % str(user).strip())
         login(request, user)               
 
