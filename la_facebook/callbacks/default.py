@@ -71,6 +71,9 @@ class DefaultFacebookCallback(BaseFacebookCallback):
         self.login_user(request, user)
         identifier = self.identifier_from_data(user_data)
         self.persist(user, token, identifier)
+        # set session expiration to match token
+        if token.expires:
+            request.session.set_expiry(token.expires)
 
     def update_profile_from_graph(self, request, access, token, profile):
         user_data = self.fetch_user_data(request, access, token)
@@ -116,8 +119,7 @@ class DefaultFacebookCallback(BaseFacebookCallback):
                     "user created for %s" % username)
 
         self.create_profile(request, access, token, user)
-        self.persist(user, token, identifier)
-        self.login_user(request, user)
+        self.handle_unauthenticated_user(request, user ,access, token, user_data)
         return user
 
 default_facebook_callback = DefaultFacebookCallback()
