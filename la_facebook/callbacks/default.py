@@ -54,6 +54,11 @@ class DefaultFacebookCallback(BaseFacebookCallback):
             assoc.token = str(token)
             assoc.expires = expires
             assoc.save()
+            logger.debug("DefaultFacebookCallback.persist: UserAssociation " \
+                    "object updated")
+        else:
+            logger.debug("DefaultFacebookCallback.persist: UserAssociation " \
+                    "object created")
 
     def redirect_url(self, request):
         return get_default_redirect(request)
@@ -64,7 +69,7 @@ class DefaultFacebookCallback(BaseFacebookCallback):
     def login_user(self, request, user):
         user.backend = "django.contrib.auth.backends.ModelBackend"
         logger.debug("DefaultFacebookCallback.login_user: logging in user %s" \
-                "with ModelBackend" % str(user).strip())
+                " with ModelBackend" % str(user).strip())
         login(request, user)               
 
     def handle_unauthenticated_user(self, request, user, access, token, user_data):
@@ -73,6 +78,8 @@ class DefaultFacebookCallback(BaseFacebookCallback):
         self.persist(user, token, identifier)
         # set session expiration to match token
         if token.expires:
+            logger.debug("DefaultFacebookCallback.handle_unauthenticated_user"\
+                    ": setting session expiration to: %s" % token.expires)
             request.session.set_expiry(token.expires)
 
     def update_profile_from_graph(self, request, access, token, profile):
