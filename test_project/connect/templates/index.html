@@ -5,11 +5,8 @@
 </head>
 <body>
     <h2>django-la-facebook test project page</h2>
-    <p>Current User: {{ request.user }}</p>
-    {% for k,v in info.items %}
-    <p>{{ k }}: {{ v }}</p>
-    {% endfor %}
-        <a href="http://localhost:8000/la_facebook/login?next=/after">Connect to Facebook!</a>
+<a href="/after">A login protected page</a>
 
+    {% include 'fbinfo.html' %}
 </body>
 </html>

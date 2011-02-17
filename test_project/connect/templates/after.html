@@ -1,18 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>This is a test</title>
+    <title>Login Protected Page</title>
 </head>
 <body>
-
-	{% if user %}
-		{% if profile %}
-			Your name is {{ profile.name }}. You're all about {{ profile.bio }}
-		{% else %}
-			You're logged in as {{ user.username }}, but you don't seem to have a profile.
-		{% endif %}
-	{% else %}
-		You don't seem to be logged in =(
-	{% endif %}
+    <h2>Login Protected Page</h2>
+    {% if user %}
+        {% if profile %}
+            Your name is {{ profile.name }}. You're all about {{ profile.bio }}
+        {% else %}
+            You're logged in as {{ user.username }}, but you don't seem to have a profile.
+        {% endif %}
+    {% else %}
+        You don't seem to be logged in =(
+    {% endif %}
+    {% include 'fbinfo.html' %}
 </body>
 </html>
