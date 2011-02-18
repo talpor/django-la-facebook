@@ -22,4 +22,30 @@ Add ``la_facebook`` to your root urlconf (urls.py)::
         ...,        
     )
 
-TODO: add in the template wiring instructions
+Settings
+--------
+
+In order to authenticate your site's users with Facebook, you need a unique
+identifier for Facebook to associate your site with.  Facebook considers your
+site an "app" and so you must acquire an ``FACEBOOK_APP_ID`` and 
+``FACEBOOK_APP_SECRET`` from the
+`Facebook Developer app <http://www.facebook.com/developers>`_.
+
+See the documentation for :doc:`settings` about how to enter these values in your 
+Django settings file.
+
+Views
+-----
+
+TODO
+
+Templates
+---------
+
+TODO
+
+Template Tags
+-------------
+
+TODO
+
