@@ -8,7 +8,7 @@ setup(
     description = "Definitive facebook auth for Django",
     long_description = open("README.rst").read(),
     license = "BSD",
-    url = "http://github.com/pydanny/django-la-facebook",
+    url = "http://github.com/cartwheelweb/django-la-facebook",
     packages = [
         "la_facebook",
         "la_facebook.templatetags",

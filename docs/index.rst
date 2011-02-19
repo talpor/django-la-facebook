@@ -24,7 +24,7 @@ External Links
 
 Project homepage: 
 
-    https://github.com/pydanny/django-la-facebook
+    https://github.com/cartwheelweb/django-la-facebook
 
 PyPI:
     
