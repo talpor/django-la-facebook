@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name = "django-la-facebook",
-    version = "0.1.alpha",
+    version = "0.1.beta",
     author = "pydanny",
     author_email = "pydanny@pydanny.com",
     description = "Definitive facebook auth for Django",
@@ -15,7 +15,7 @@ setup(
         "la_facebook.utils",
     ],
     classifiers = [
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 3 - Beta",
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
