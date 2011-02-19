@@ -100,6 +100,12 @@ INSTALLED_APPS = (
     'la_facebook',
 )
 
+try:
+    import django_coverage
+    INSTALLED_APPS += ('django_coverage',)
+except ImportError:
+    pass
+
 FACEBOOK_APP_ID = '124397597633470'
 FACEBOOK_API_KEY = '0d6acba060823bac2f93708d98d7e74a'
 FACEBOOK_APP_SECRET = 'cdd60917e6a30548b933ba91c48289bc'
@@ -114,6 +120,7 @@ FACEBOOK_ACCESS_SETTINGS = {
         "LOG_LEVEL": "DEBUG",
         "LOG_FILE": "/tmp/la_facebook.log",
         # The following keys are optional
-        # "CALLBACK": "la_facebook.callbacks.default.default_facebook_callback",
+        # TODO - Comment next line out but still have tests pass
+        "CALLBACK": "la_facebook.callbacks.default.default_facebook_callback", 
         #"PROVIDER_SCOPE": ['email','read_stream'], # here as sample - optional
 }
