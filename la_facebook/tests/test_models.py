@@ -26,7 +26,7 @@ class UserAssociationTests(TestCase):
         self.assertTrue(ua_active.expired())
         
         ua_expired = UserAssociation.objects.create(
-                user=self.user,
+                user=self.user2,
                 identifier='54321',
                 token='54321',
                 expires=datetime.now() - timedelta(1)
