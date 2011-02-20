@@ -8,7 +8,7 @@ from la_facebook.utils.loader import load_path_attr
 from la_facebook.exceptions import FacebookSettingsKeyError
 
 
-class BrokenSettings(TestCase):
+class MissingKeySetting(TestCase):
 
     def setUp(self):
         try:
@@ -24,6 +24,27 @@ class BrokenSettings(TestCase):
 
     def tearDown(self):
         settings.FACEBOOK_ACCESS_SETTINGS["FACEBOOK_APP_ID"] = self.app_id
+
+class MissingFacebookSettings(TestCase):
+    """check that missing settings dict throws ImproperlyConfigured"""
+
+    def setUp(self):
+        try:
+            print "setUp for MissingFacebookSettings"
+            self.facebook_settings = settings.FACEBOOK_ACCESS_SETTINGS
+            del(settings.FACEBOOK_ACCESS_SETTINGS)
+        except (ImproperlyConfigured):
+            # already missing from settings
+            print "settings already missing"
+            pass
+
+    def facebook_settings_missing(self):
+        print "facebook_settings_missing"
+        self.assertRaises(ImproperlyConfigured, OAuthAccess)
+
+    def tearDown(self):
+        settings.FACEBOOK_ACCESS_SETTINGS = self.facebook_settings
+
 
 class PropertyTests(TestCase):
 
