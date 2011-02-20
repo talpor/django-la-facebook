@@ -66,7 +66,7 @@ def facebook_callback(request, template_name="la_facebook/fb_error.html"):
             % ', '.join(fb_errors))
 
     # Can't change to 401 error because that prompts basic browser auth
-    return render_to_response("la_facebook/fb_error.html", ctx)
+    return render_to_response(template_name, ctx)
 
 '''
 # TODO - delete or actually use.
