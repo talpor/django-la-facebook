@@ -68,7 +68,9 @@ def facebook_callback(request, template_name="la_facebook/fb_error.html"):
     # Can't change to 401 error because that prompts basic browser auth
     return render_to_response("la_facebook/fb_error.html", ctx)
 
-
+'''
+# TODO - delete or actually use.
+# Probably unnecessary
 def finish_signup(request):
     """
         1. access OAuth
@@ -77,3 +79,4 @@ def finish_signup(request):
     
     access = OAuthAccess()
     return access.callback.finish_signup(request)
+'''
