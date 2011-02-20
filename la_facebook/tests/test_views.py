@@ -13,10 +13,10 @@ class BasicViews(TestCase):
                 pointers to the facebook site
         """
         
-        self.url = reverse('la_facebook_login')        
+        url = reverse('la_facebook_login')        
         
         # we have 302?
-        response = self.client.get(self.url)
+        response = self.client.get(url)
         self.assertEquals(response.status_code, 302)
         
         # Now check on the location header passed to the browser
@@ -28,3 +28,12 @@ class BasicViews(TestCase):
         # Is the facebook APP ID in the location header?
         app_id = settings.FACEBOOK_ACCESS_SETTINGS['FACEBOOK_APP_ID']
         self.assertTrue(location.endswith(app_id))
+        
+    def test_facebook_callback(self):
+        """ This only supports failure.
+            TODO: make it cover success
+        
+        """
+        url = reverse('la_facebook_callback')
+        response = self.client.get(url)
+        self.assertContains(response, "OAuth Error: token_mismatch")

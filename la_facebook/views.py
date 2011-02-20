@@ -24,7 +24,7 @@ def facebook_login(request, redirect_field_name="next",
     return HttpResponseRedirect(access.authorization_url(token))
 
 
-def facebook_callback(request):
+def facebook_callback(request, template_name="la_facebook/fb_error.html"):
     """
         1. define RequestContext
         2. access OAuth
@@ -65,6 +65,7 @@ def facebook_callback(request):
     logger.warning('la_facebook.views.facebook_callback: %s'
             % ', '.join(fb_errors))
 
+    # Can't change to 401 error because that prompts basic browser auth
     return render_to_response("la_facebook/fb_error.html", ctx)
 
 
