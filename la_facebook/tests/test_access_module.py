@@ -26,7 +26,7 @@ class MissingKeySetting(TestCase):
         settings.FACEBOOK_ACCESS_SETTINGS["FACEBOOK_APP_ID"] = self.app_id
 
 class MissingFacebookSettings(TestCase):
-    """check that missing settings dict throws ImproperlyConfigured"""
+    """check that missing settings dict throws AttributeError"""
 
     def setUp(self):
         try:
@@ -35,12 +35,10 @@ class MissingFacebookSettings(TestCase):
             del(settings.FACEBOOK_ACCESS_SETTINGS)
         except (ImproperlyConfigured):
             # already missing from settings
-            print "settings already missing"
             pass
 
-    def facebook_settings_missing(self):
-        print "facebook_settings_missing"
-        self.assertRaises(ImproperlyConfigured, OAuthAccess)
+    def test_facebook_settings_missing(self):
+        self.assertRaises(AttributeError, OAuthAccess)
 
     def tearDown(self):
         settings.FACEBOOK_ACCESS_SETTINGS = self.facebook_settings
