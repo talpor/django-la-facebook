@@ -28,8 +28,7 @@
 <input type="submit" value="login" />
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
-<p><a href="http://localhost:8000/la_facebook/login?next={{ next }}">Login with FaceBook</a></p>
-
+<p><a href="{% url la_facebook_login %}?next={{ next }}">Login with FaceBook</a></p>
 </body>
 </html>
 
