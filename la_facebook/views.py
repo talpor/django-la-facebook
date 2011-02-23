@@ -20,11 +20,12 @@ def facebook_login(request, redirect_field_name="next",
     token = None
     if hasattr(request, "session"):
         logger.debug("la_facebook.views.facebook_login: request has session")
+        # this session variable is used by the callback
         request.session[redirect_to_session_key] = request.GET.get(redirect_field_name)
     return HttpResponseRedirect(access.authorization_url(token))
 
 
-def facebook_callback(request, template_name="la_facebook/fb_error.html"):
+def facebook_callback(request, error_template_name="la_facebook/fb_error.html"):
     """
         1. define RequestContext
         2. access OAuth
@@ -66,7 +67,7 @@ def facebook_callback(request, template_name="la_facebook/fb_error.html"):
             % ', '.join(fb_errors))
 
     # Can't change to 401 error because that prompts basic browser auth
-    return render_to_response(template_name, ctx)
+    return render_to_response(error_template_name, ctx)
 
 '''
 # TODO - delete or actually use.
