@@ -52,7 +52,8 @@ class DefaultFacebookCallback(BaseFacebookCallback):
             # update user email
             if user.email != user_data['email']:
                 user.email = user_data['email']
-                logger.debug("Updated email for %s" % user)
+                user.save()
+                logger.debug("Updated email for %s to %s" % (user,user_data['email']))
         if not created:
             assoc.token = str(token)
             assoc.expires = expires
