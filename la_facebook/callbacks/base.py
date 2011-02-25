@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.db.models import get_model
+from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -10,7 +11,6 @@ from la_facebook.la_fb_logging import logger
 
 class BaseFacebookCallback(object):
 
-    LA_FACEBOOK_PROFILE_PREFIX = 'fb-'
     FACEBOOK_GRAPH_TARGET = "https://graph.facebook.com/me"
 
     def __call__(self, request, access, token):
@@ -72,7 +72,5 @@ class BaseFacebookCallback(object):
         raise NotImplementedError("Callbacks must have a handle_unauthenticated_user method")
 
     def identifier_from_data(self, data):
-        # @@@ currently this is being used to make/lookup users and we don't
-        # want a clash between services. need to look into the more.
-        return self.LA_FACEBOOK_PROFILE_PREFIX + data["id"]
+        return "%s-%s" % (slugify(data['name']), data['id'])
 
