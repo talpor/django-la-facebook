@@ -181,7 +181,7 @@ class OAuthAccess(object):
                 params["client_secret"] = self.secret
                 params["code"] = code
                 logger.debug("OAuthAccess.check_token: token access params: "\
-                        "%s, sent to %s" % (params,self.access_token_url))
+                        "%s, sent to %s" % (params, self.access_token_url))
                 raw_data = urllib.urlopen(
                     "%s?%s" % (
                         self.access_token_url, urllib.urlencode(params)
