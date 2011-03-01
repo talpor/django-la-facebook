@@ -21,7 +21,7 @@ class DefaultFacebookCallback(BaseFacebookCallback):
             if user does not exist return none
             else return user
         """
-        identifier=self.identifier_from_data(user_data)
+        identifier=user_data["id"]
         queryset = UserAssociation.objects.all()
         queryset = queryset.select_related("user")
         try:
