@@ -1,14 +1,21 @@
 import datetime
 from django.test import TestCase
+
+try:
+  from mock import Mock, patch
+except ImportError:
+  raise ImportError("Mock is a requirement for la_facebook tests")
+
 try:
     from django.test.client import RequestFactory
 except ImportError:
     raise ImportError("callback tests require Django > 1.3 for RequestFactory")
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 
 from la_facebook.access import OAuthAccess
 from la_facebook.callbacks.base import BaseFacebookCallback
+from la_facebook.callbacks.default import DefaultFacebookCallback
 # from la_facebook.la_fb_logging import logger
 from la_facebook.models import UserAssociation
 
@@ -72,3 +79,48 @@ class BaseCallbackTests(TestCase):
         callback = BaseFacebookCallback()
         self.assertRaises(NotImplementedError,callback.handle_unauthenticated_user,
                 'arg','arg','arg','arg','arg')
+
+
+class DefaultCallbackTests(TestCase):
+
+    urls = 'la_facebook.tests.urls'
+
+    def setUp(self):
+        # logger.debug("callback test case setup")
+        self.request = factory.get('/callback',data={'next':'dummy'})
+        test_user = User()
+        test_user.username = 'test'
+        test_user.save()
+        self.test_user = test_user
+        self.anon_user = AnonymousUser()
+        self.request.user = test_user
+        assoc = UserAssociation()
+        assoc.user = test_user
+        assoc.token = 'facebooktokenstring'
+        assoc.identifier = 'facebookid'
+        assoc.expires = datetime.datetime.now() + datetime.timedelta(1)
+        assoc.save()
+        self.token = assoc.token
+        self.access = OAuthAccess()
+
+    def test_lookup_user_exists(self):
+        callback = DefaultFacebookCallback()
+        user = callback.lookup_user(self.request, self.access,{'id':'facebookid'})
+        self.assertEquals(user, self.test_user)
+
+    def test_lookup_user_does_not_exist(self):
+        callback = DefaultFacebookCallback()
+        user = callback.lookup_user(self.request, self.access,{'id':'bad-id'})
+        self.assertEquals(user,None)
+
+    def test_update_profile_from_graph(self):
+        callback = DefaultFacebookCallback()
+        class DummyProfile(object):
+            def __init__(self):
+                self.color = "blue"
+        profile = DummyProfile()
+        # TODO need mock user data for this
+        pass
+
+
+
