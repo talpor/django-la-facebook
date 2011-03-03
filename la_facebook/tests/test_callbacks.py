@@ -13,13 +13,17 @@ except ImportError:
 
 from django.contrib.auth.models import User, AnonymousUser
 
-from la_facebook.access import OAuthAccess
+from la_facebook.access import OAuthAccess, OAuth20Token
 from la_facebook.callbacks.base import BaseFacebookCallback
 from la_facebook.callbacks.default import DefaultFacebookCallback
 # from la_facebook.la_fb_logging import logger
 from la_facebook.models import UserAssociation
 
 factory = RequestFactory()
+
+mock_fetch_user_data = Mock()
+mock_fetch_user_data.return_value = {'id':'facebookid'}
+
 
 class BaseCallbackTests(TestCase):
 
@@ -122,5 +126,12 @@ class DefaultCallbackTests(TestCase):
         # TODO need mock user data for this
         pass
 
+    @patch(
+       'la_facebook.callbacks.default.DefaultFacebookCallback.fetch_user_data',
+       mock_fetch_user_data)
+    def test_fectch_user_data(self):
+        callback = DefaultFacebookCallback()
+        ud = callback.fetch_user_data(self.request, self.access, 'faketoken')
+        self.assertEquals(ud['id'], 'facebookid')
 
 
