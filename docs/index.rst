@@ -13,6 +13,7 @@ Contents:
    
    usage
    settings
+   callbacks
    test_project   
    background
    goals
