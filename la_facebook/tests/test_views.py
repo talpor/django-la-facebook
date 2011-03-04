@@ -3,7 +3,11 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.test import TestCase
 
-from mock import Mock, patch
+try:
+    from mock import Mock, patch
+except ImportError:
+  raise ImportError("Mock is a requirement for la_facebook tests")
+
 
 from la_facebook.models import UserAssociation
 from la_facebook.access import OAuthAccess, OAuth20Token
