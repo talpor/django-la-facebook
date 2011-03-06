@@ -1,3 +1,5 @@
+import urlparse
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -68,8 +70,10 @@ class BaseFacebookCallback(object):
             # try the session if available
             if hasattr(request, "session"):
                 redirect_to = request.session.get(session_key_value)
-        # light security check -- make sure redirect_to isn't garabage.
-        if not redirect_to or "://" in redirect_to or " " in redirect_to:
+        # improved security check -- make sure redirect_to isn't garabage.
+        netloc = urlparse.urlparse(redirect_to)[1]
+        # Heavier security check -- don't allow redirection to a different host.
+        if netloc and netloc != request.host:
             redirect_to = fallback_url
         return redirect_to
 
