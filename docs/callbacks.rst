@@ -43,36 +43,92 @@ Callback Reference
 A callback is a view like object is called with instances of a Django request,
 OAuthAccess, and OAuth20Token.
 
-BaseFacebookCallback
 
-__call__ is called by the view and handles the basic check of whether the user
-is authenticated and dispatches to the other methods as nessasary and then
-returns the response to the view and thus to the browser (usually a redirect)
+.. py:class:: BaseFacebookCallback
 
-fetch_user_data Not implemented.
+    Provides a largely abstract class defining an auth interaction with
+    Facebook.
 
-lookup_user Not implemented.
+.. py:method:: __call__(request, access, token)
 
-redirect_url Checks in order: the request GET params, the session, settings for
-a url to redirect to.
+    is called by the view and handles the basic check of whether the user
+    is authenticated and dispatches to the other methods as nessasary and then
+    returns the response to the view and thus to the browser (usually a redirect)
 
-handle_no_user Not implemented.
+.. py:method:: fetch_user_data(request, access, token)
 
-handle_unauthenticated_user Not implemented.
+    Not implemented.
 
-identifier_from_data Concatenates a sluggified facebook name and user id
+.. py:method:: lookup_user(request, access, token)
 
-DefaultFacebookCallback
+    Not implemented.
 
-TODO
+.. py:method:: redirect_url(request, access, token)
 
-    fetch_user_data [DefaultFacebookCallback]
-    lookup_user [DefaultFacebookCallback]
-    persist [DefaultFacebookCallback]
-    handle_no_user [DefaultFacebookCallback]
-    login_user [DefaultFacebookCallback]
-    handle_unauthenticated_user [DefaultFacebookCallback]
-    update_profile_from_graph [DefaultFacebookCallback]
-    create_profile [DefaultFacebookCallback]
-    create_user [DefaultFacebookCallback]
+    Checks in order: the request GET params, the session, settings for
+    a url to redirect to.
+
+.. py:method:: handle_no_user(request, access, token, user_data)
+
+    Not implemented.
+
+.. py:method:: handle_unauthenticated_user(request, access, token, user_data)
+
+    Not implemented.
+
+.. py:method:: identifier_from_data(data)
+
+    Concatenates a sluggified facebook name and user id
+
+.. py:module:: la_facebook.callbacks.default
+
+
+.. py:class:: DefaultFacebookCallback
+
+    Provides the default implementation.
+
+.. py:method:: fetch_user_data(self, request, access, token):
+
+    Uses the authorized token and makes an API call to Facebook to retrieve the
+    user graph data.
+
+.. py:method:: lookup_user(self, request, access, user_data):
+
+    Based on the Facebook user ID in the :param user_data:, will attempt to
+    lookup a an associated Django user.  If one is not found, returns None.
+
+.. py:method:: persist(self, user, token, user_data):
+
+    Creates or updates the user association object, and if available updates
+    the Django user's email from the Facebook user's data.
+
+.. py:method:: handle_no_user(self, request, access, token, user_data):
+
+    The default implementation simply returns :py:meth:`.create_user`.
+
+.. py:method:: login_user(self, request, user):
+
+    The default implementation assumes Django's model backend, and will log the
+    user in via that backend's login method.
+
+.. py:method:: handle_unauthenticated_user(self, request, user, access, token, user_data):
+
+    Given a valid user, the user is first logged in, and then their Facebook
+    data is created or updated through persist.  Finally the session's
+    expiration is set to match the expiration of the Facebook auth token.
+
+.. py:method:: update_profile_from_graph(self, request, access, token, profile):
+
+    Given a profile object, will try to update any fields whose names match the
+    Facebook usergraph object.
+
+.. py:method:: create_profile(self, request, access, token, user):
+
+    if ``AUTH_PROFILE_MODULE`` is set, will attempt to create and then update
+    a profile object for the given user.
+
+.. py:method:: create_user(self, request, access, token, user_data):
+
+    If the user does not already exist, creates a user, a profile if available,
+    and logs the user in.
 
