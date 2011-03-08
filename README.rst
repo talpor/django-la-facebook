@@ -15,7 +15,6 @@ Full Documentation:
 Usage
 -----
 
-*Note: still in process of writing this down*
 
 Get ``django-la-facebook`` into your python path::
 
@@ -37,4 +36,14 @@ Add ``la_facebook`` to your root urlconf (urls.py)::
         ...,        
     )
 
-TODO: add in the template wiring instructions
+Add settings just as:
+
+    FACEBOOK_ACCESS_SETTINGS = {
+            "FACEBOOK_APP_ID": FACEBOOK_APP_ID,
+            "FACEBOOK_APP_SECRET": FACEBOOK_APP_SECRET,
+            # The following keys are optional
+            # "CALLBACK": "la_facebook.callbacks.default.default_facebook_callback",
+            # "PROVIDER_SCOPE": "email,read_stream",
+            # "LOG_LEVEL": "DEBUG",
+            # "LOG_FILE": "/tmp/la_facebook.log",
+    }
