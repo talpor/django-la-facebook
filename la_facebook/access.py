@@ -190,9 +190,14 @@ class OAuthAccess(object):
                 response = cgi.parse_qs(raw_data)
                 logger.debug("OAuthAccess.check_token: response from code"\
                         "request: %s" % response)
+                if 'expires' in response:
+                    expires = int(response["expires"][-1])
+                else:
+                    expires = None
+
                 return OAuth20Token(
                     response["access_token"][-1],
-                    int(response["expires"][-1])
+                    expires
                 )
             else:
                 # @@@ this error case is not nice
