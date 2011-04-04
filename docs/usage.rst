@@ -87,6 +87,16 @@ You can used the following image provided by facebook as a graphical link::
 Other than the error template mentioned above, no particular templates are used
 or customized.
 
+Changing the display layout of the login page
+---------------------------------------------
+
+By default the login flow redirects you to facebook for login in your main
+browser window, and the layout of this page is suited to be a complete page.
+Facebook also supports an alternate "popup" display style, which is better
+suited for popup windows.  This can reduce the feeling that the user is leaving
+your site. You must pass the ``display:popup`` option to the login view in your
+own project urls.py, and you must handle the creation and destruction of the
+actual popup window yourself.
 
 Template Tags
 -------------
