@@ -8,7 +8,8 @@ from la_facebook.la_fb_logging import logger
 
 
 def facebook_login(request, redirect_field_name="next",
-                        redirect_to_session_key="redirect_to"):
+                        redirect_to_session_key="redirect_to",
+                        display="page"):
     """
         1. access OAuth
         2. set token to none
@@ -22,7 +23,7 @@ def facebook_login(request, redirect_field_name="next",
         logger.debug("la_facebook.views.facebook_login: request has session")
         # this session variable is used by the callback
         request.session[redirect_to_session_key] = request.GET.get(redirect_field_name)
-    return HttpResponseRedirect(access.authorization_url(token))
+    return HttpResponseRedirect(access.authorization_url(token, display=display))
 
 
 def facebook_callback(request, error_template_name="la_facebook/fb_error.html"):

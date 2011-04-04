@@ -217,7 +217,7 @@ class OAuthAccess(object):
             callback_str = "la_facebook.callbacks.default.default_facebook_callback"
         return load_path_attr(callback_str)
 
-    def authorization_url(self, token=None):
+    def authorization_url(self, token=None, display="page"):
         """
             authorization url
             if token is none set OAuth params client id, url, set scope and rturn authorization url
@@ -229,6 +229,7 @@ class OAuthAccess(object):
             params = dict(
                 client_id = self.key,
                 redirect_uri = self.callback_url,
+                display = display,
             )
             scope = self.provider_scope
             if scope is not None:
