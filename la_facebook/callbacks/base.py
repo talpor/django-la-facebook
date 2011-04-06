@@ -44,6 +44,7 @@ class BaseFacebookCallback(object):
             self.authenticated = True
             user = request.user
         redirect_to = self.redirect_url(request)
+        logger.debug("redirecting to: %s" % redirect_to)
 
         return redirect(redirect_to)
 
@@ -67,13 +68,17 @@ class BaseFacebookCallback(object):
 
         redirect_to = request.REQUEST.get(redirect_field_name)
         if not redirect_to:
+            logger.debug("redirect not in get params")
             # try the session if available
             if hasattr(request, "session"):
                 redirect_to = request.session.get(session_key_value)
-        # improved security check -- make sure redirect_to isn't garabage.
-        netloc = urlparse.urlparse(redirect_to)[1]
-        # Heavier security check -- don't allow redirection to a different host.
-        if netloc and netloc != request.host:
+                # Heavier security check -- don't allow redirection to a different host.
+                netloc = urlparse.urlparse(redirect_to)[1]
+                if netloc and netloc != request.host:
+                    logger.warning("redirect_to host does not match orgin")
+                    redirect_to = fallback_url
+        if not redirect_to:
+            logger.debug("no redirect found, using fallback")
             redirect_to = fallback_url
         return redirect_to
 
