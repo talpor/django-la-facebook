@@ -1,4 +1,5 @@
 from distutils.core import setup
+from setuptools import setup, find_packages
 
 setup(
     name = "django-la-facebook",
@@ -9,11 +10,8 @@ setup(
     long_description = open("README.rst").read(),
     license = "BSD",
     url = "http://github.com/cartwheelweb/django-la-facebook",
-    packages = [
-        "la_facebook",
-        "la_facebook.templatetags",
-        "la_facebook.utils",
-    ],
+    packages=find_packages(),
+    install_requires=["oauth2"],
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
