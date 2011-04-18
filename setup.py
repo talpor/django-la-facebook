@@ -11,7 +11,7 @@ setup(
     license = "BSD",
     url = "http://github.com/cartwheelweb/django-la-facebook",
     packages=find_packages(),
-    install_requires=["oauth2"],
+    install_requires=["oauth2"],   
     classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
